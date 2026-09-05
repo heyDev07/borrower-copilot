@@ -25,9 +25,12 @@ Built in small phases, backend first. See commit history for progress.
 | 5 | RULES.md | ✅ |
 | 6 | Frontend scaffold (Vite + React) | ✅ |
 | 7 | Question flow, results, Negotiation Card, adaptive loop | ✅ |
-| 8 | Three run-throughs + walkthrough | ⏳ |
+| 8 | Every question wired to actually move an output | ✅ |
+| 9 | Three run-throughs + walkthrough | ✅ |
 
-See [RULES.md](RULES.md) for every threshold the engine uses, and why.
+All four required deliverables are at the repo root:
+[RULES.md](RULES.md) · the app (`backend/`, `frontend/`) ·
+[RUNTHROUGHS.md](RUNTHROUGHS.md) · [WALKTHROUGH.md](WALKTHROUGH.md)
 
 ## Stack
 
