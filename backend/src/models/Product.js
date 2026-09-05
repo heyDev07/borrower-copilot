@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema({
     max: { type: Number, required: true },
   },
   processingFeePct: { type: Number, required: true },
+  maxTenureMonths: { type: Number, required: true },
   appliesToPurpose: [{ type: String }],
   notes: String,
 });

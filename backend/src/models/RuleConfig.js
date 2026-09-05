@@ -5,6 +5,8 @@ const tierCapSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// All ratios in this schema are plain percentages (55 means 55%), the
+// same convention Product uses for rateBandPct and processingFeePct.
 const ruleConfigSchema = new mongoose.Schema({
   key: { type: String, required: true, unique: true, default: 'default' },
 
