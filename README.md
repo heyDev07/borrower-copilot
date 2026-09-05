@@ -23,7 +23,9 @@ Built in small phases, backend first. See commit history for progress.
 | 3 | Rules engine (affordability, routing, risk, rate) | ✅ |
 | 4 | Assessment API | ✅ |
 | 5 | RULES.md | ✅ |
-| 6 | Frontend (React) | ⏳ |
+| 6 | Frontend scaffold (Vite + React) | ✅ |
+| 7 | Question flow | ⏳ |
+| 8 | Results + Negotiation Card | ⏳ |
 
 See [RULES.md](RULES.md) for every threshold the engine uses, and why.
 
@@ -35,7 +37,8 @@ answers. Every borrower session is stateless: answers in, a card out.
 
 ## Running locally
 
-See [backend/README.md](backend/README.md) for setup.
+Backend: see [backend/README.md](backend/README.md).
+Frontend: see [frontend/README.md](frontend/README.md).
 
 ## The brief
 

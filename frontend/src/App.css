@@ -1,0 +1,43 @@
+.app {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+}
+
+.app-header {
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.5rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.status {
+  font-family: monospace;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.status-connected {
+  color: #2f5233;
+  border-color: #2f5233;
+}
+
+.status-unreachable {
+  color: var(--accent);
+  border-color: var(--accent);
+}
