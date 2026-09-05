@@ -36,3 +36,7 @@ answers. Every borrower session is stateless: answers in, a card out.
 ## Running locally
 
 See [backend/README.md](backend/README.md) for setup.
+
+## The brief
+
+The original challenge document is at [docs/challenge-brief.html](docs/challenge-brief.html).
