@@ -24,8 +24,8 @@ Built in small phases, backend first. See commit history for progress.
 | 4 | Assessment API | ✅ |
 | 5 | RULES.md | ✅ |
 | 6 | Frontend scaffold (Vite + React) | ✅ |
-| 7 | Question flow | ⏳ |
-| 8 | Results + Negotiation Card | ⏳ |
+| 7 | Question flow, results, Negotiation Card, adaptive loop | ✅ |
+| 8 | Three run-throughs + walkthrough | ⏳ |
 
 See [RULES.md](RULES.md) for every threshold the engine uses, and why.
 
