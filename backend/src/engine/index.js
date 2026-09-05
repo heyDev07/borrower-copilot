@@ -11,6 +11,17 @@ function lowerFirst(text) {
   return text.charAt(0).toLowerCase() + text.slice(1);
 }
 
+function compareToOffer(offerReceivedRate, rateBand) {
+  if (!offerReceivedRate) return null;
+  if (offerReceivedRate > rateBand.max) {
+    return `A lender quoted you ${offerReceivedRate}% — that's above fair. Ask for ${rateBand.min}–${rateBand.max}%.`;
+  }
+  if (offerReceivedRate < rateBand.min) {
+    return `A lender quoted you ${offerReceivedRate}% — that's already better than fair for your profile.`;
+  }
+  return `A lender quoted you ${offerReceivedRate}% — that's within the fair range.`;
+}
+
 // Runs the whole pipeline once: tiering -> affordability -> product ->
 // risk -> rate -> verdict -> outputs. Pure function — no I/O, so it's
 // easy to unit test and easy to defend line by line.
@@ -23,24 +34,31 @@ function runAssessment(answers, { products, ruleConfig, questions }) {
   const affordability = computeAffordability(answers, foirCapPct, ruleConfig);
   const product = routeProduct(answers, products, ruleConfig);
   const riskFlags = evaluateRiskFlags(answers, ruleConfig);
-  const rateBand = computeRateBand(tier, riskFlags, product);
-  const aprBand = computeAprBand(rateBand, product);
+  const rateBand = computeRateBand(tier, riskFlags, product, answers.incomeStabilityMonths);
   const midRate = (rateBand.min + rateBand.max) / 2;
 
-  const emiForRequestedAmount = emiForPrincipal(answers.loanAmountRequested, midRate, product.maxTenureMonths);
+  // A loan has to be repaid before retirement — cap the tenure this
+  // borrower can actually use, not just what the product allows.
+  const ageCappedTenureMonths = Math.max(6, (ruleConfig.retirementAge - answers.age) * 12);
+  const tenureMonths = Math.min(product.maxTenureMonths, ageCappedTenureMonths);
+
+  const aprBand = computeAprBand(rateBand, product, tenureMonths);
+  const emiForRequestedAmount = emiForPrincipal(answers.loanAmountRequested, midRate, tenureMonths);
 
   const verdict = computeVerdict({
     loanAmountRequested: answers.loanAmountRequested,
     recommendedEmiCeiling: affordability.recommendedEmiCeiling,
     emiForRequestedAmount,
     riskFlags,
+    loanProductiveReturnPct: answers.loanProductiveReturnPct,
+    midRate,
   });
 
-  const lenderMaxAmount = principalForEmi(affordability.lenderEmiCeiling, midRate, product.maxTenureMonths);
-  const borrowerSafeMaxAmount = principalForEmi(affordability.borrowerSafeEmiCeiling, midRate, product.maxTenureMonths);
+  const lenderMaxAmount = principalForEmi(affordability.lenderEmiCeiling, midRate, tenureMonths);
+  const borrowerSafeMaxAmount = principalForEmi(affordability.borrowerSafeEmiCeiling, midRate, tenureMonths);
 
   const tenureOptions = [0.25, 0.5, 1].map((fraction) => {
-    const months = Math.max(6, Math.round((product.maxTenureMonths * fraction) / 6) * 6);
+    const months = Math.max(6, Math.round((tenureMonths * fraction) / 6) * 6);
     return { months, emi: Math.round(emiForPrincipal(answers.loanAmountRequested, midRate, months)) };
   });
 
@@ -51,7 +69,7 @@ function runAssessment(answers, { products, ruleConfig, questions }) {
     ruleConfig
   );
   const stressedRate = midRate + ruleConfig.stressRateRisePct;
-  const stressedEmiForRequested = emiForPrincipal(answers.loanAmountRequested, stressedRate, product.maxTenureMonths);
+  const stressedEmiForRequested = emiForPrincipal(answers.loanAmountRequested, stressedRate, tenureMonths);
 
   const confidence = computeConfidence(
     answers,
@@ -78,7 +96,8 @@ function runAssessment(answers, { products, ruleConfig, questions }) {
         product: product.label,
         rateBandPct: rateBand,
         aprBandPct: aprBand,
-        reason: `${product.label} for a "${tier}" credit tier, with the processing fee spread over ${product.maxTenureMonths} months folded into the APR.`,
+        offerComparison: compareToOffer(answers.offerReceivedRate, rateBand),
+        reason: `${product.label} for a "${tier}" credit tier, with the processing fee spread over ${tenureMonths} months folded into the APR.`,
       },
       O4: {
         emiCeiling: Math.round(affordability.recommendedEmiCeiling),
@@ -99,6 +118,7 @@ function runAssessment(answers, { products, ruleConfig, questions }) {
       rateBandPct: rateBand,
       aprBandPct: aprBand,
       emiCeiling: Math.round(affordability.recommendedEmiCeiling),
+      offerComparison: compareToOffer(answers.offerReceivedRate, rateBand),
       headline: `Fair for your profile is ${rateBand.min}–${rateBand.max}%, because ${lowerFirst(verdict.reason)}`,
     },
   };

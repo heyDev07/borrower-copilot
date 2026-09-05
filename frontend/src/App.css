@@ -185,7 +185,13 @@ button:disabled {
 }
 
 .card-headline {
+  margin: 0 0 0.6rem;
+}
+
+.card-offer {
   margin: 0 0 1rem;
+  font-size: 0.9rem;
+  font-style: italic;
 }
 
 .card-facts {

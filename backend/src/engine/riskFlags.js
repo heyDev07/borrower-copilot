@@ -3,7 +3,7 @@
 
 function evaluateRiskFlags(answers, ruleConfig) {
   const flags = [];
-  const { pastBounceCount6m, existingDebtOutstanding, existingDebtAvgApr } = answers;
+  const { pastBounceCount6m, existingDebtOutstanding, existingDebtAvgApr, creditUtilisationPct } = answers;
 
   if (pastBounceCount6m > 0) {
     flags.push({
@@ -18,6 +18,14 @@ function evaluateRiskFlags(answers, ruleConfig) {
       code: 'HIGH_COST_DEBT',
       severity: 'hard',
       message: `Existing debt at ${existingDebtAvgApr}% — above the ${ruleConfig.highCostDebtApr}% high-cost line`,
+    });
+  }
+
+  if (creditUtilisationPct >= ruleConfig.highUtilisationPct) {
+    flags.push({
+      code: 'HIGH_UTILISATION',
+      severity: creditUtilisationPct >= 90 ? 'hard' : 'soft',
+      message: `Credit card utilisation at ${creditUtilisationPct}% — above the ${ruleConfig.highUtilisationPct}% comfort line`,
     });
   }
 

@@ -36,7 +36,11 @@ const ruleConfigSchema = new mongoose.Schema({
 
   // Existing debt above this APR is flagged as high-cost.
   highCostDebtApr: Number,
+  highUtilisationPct: Number,
   bounceLookbackMonths: Number,
+
+  // Loan tenure is capped so it ends before this age.
+  retirementAge: Number,
 
   // Stress test assumptions for O4.
   stressIncomeDropPct: Number,

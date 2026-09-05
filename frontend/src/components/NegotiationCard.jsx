@@ -15,6 +15,7 @@ function NegotiationCard({ card }) {
       <p className="card-label">Negotiation Card</p>
       <p className="card-verdict">{VERDICT_LABEL[card.verdict]}</p>
       <p className="card-headline">{card.headline}</p>
+      {card.offerComparison && <p className="card-offer">{card.offerComparison}</p>}
       <dl className="card-facts">
         <dt>Product</dt>
         <dd>{card.product}</dd>
