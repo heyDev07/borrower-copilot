@@ -19,9 +19,9 @@ Built in small phases, backend first. See commit history for progress.
 | Phase | What | Status |
 |---|---|---|
 | 1 | Backend scaffold (Express, health check) | ✅ |
-| 2 | Rules config models + seed data (MongoDB) | ⏳ |
-| 3 | Rules engine (affordability, routing, risk, rate) | ⏳ |
-| 4 | Assessment API | ⏳ |
+| 2 | Rules config models + seed data (MongoDB) | ✅ |
+| 3 | Rules engine (affordability, routing, risk, rate) | ✅ |
+| 4 | Assessment API | ✅ |
 | 5 | RULES.md | ⏳ |
 | 6 | Frontend (React) | ⏳ |
 
